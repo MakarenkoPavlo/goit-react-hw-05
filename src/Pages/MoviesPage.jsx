@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { fetchMovieSearch } from '../Components/Api/Api'
 import { SearchForm } from "../Components/SearchForm/SearchForm";
 import { Loader } from '../Components/Loader/Loader';
 import { ErrorMassage } from '../Components/ErrorMassage/ErrorMassage';
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function MoviesPage() {
    const [query, setQuery] = useState('');
@@ -11,13 +12,16 @@ export default function MoviesPage() {
   const [loader, setLoader] = useState(false);
   const [error, setError] = useState(false);
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const searchMovie = async query => {
-  setQuery(query.value);
+      setQuery(query.value);
+    setSearchParams({ query: query.value }); 
   };
   
 useEffect(() => {
   const fetchSearchMovies = async () => {
+      const query = searchParams.get('query');
       if (!query) return;
       try {
         setLoader(true);
