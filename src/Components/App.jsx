@@ -1,29 +1,32 @@
-import { Routes, Route} from 'react-router-dom';
-import HomePage from '../Pages/HomePage.jsx'
-import MovieDetailsPage from '../Pages/MovieDetailsPage.jsx'
-import MoviesPage from '../Pages/MoviesPage.jsx'
-import NotFoundPage from '../Pages/NotFoundPage.jsx'
-import { Navbar } from './Navbar/Navbar.jsx'
+import { Routes, Route } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { Navbar } from './Navbar/Navbar.jsx';
 
-
-
+const HomePage = lazy(() => import('../Pages/HomePage.jsx'));
+const MovieDetailsPage = lazy(() => import('../Pages/MovieDetailsPage.jsx'));
+const MoviesPage = lazy(() => import('../Pages/MoviesPage.jsx'));
+const NotFoundPage = lazy(() => import('../Pages/NotFoundPage.jsx'));
+const MovieCast = lazy(() => import('./MovieCast/MovieCast.jsx'));
+const MovieReviews = lazy(() => import('./MovieReviews/MovieReviews.jsx'));
 
 export const App = () => {
-  
-
   return (
     <div>
-      <Navbar />
-    <div>
-      <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/movies" element={<MoviesPage />} />
-            <Route path="/movies/:movieId" element={<MovieDetailsPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-      </div>
+      <Suspense fallback={<div>Loading subpage...</div>}>
+        <Navbar />
+      
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/movies" element={<MoviesPage />} />
+            <Route path="/movies/:movieId" element={<MovieDetailsPage />}>
+              <Route path="cast" element={<MovieCast />} />
+              <Route path="reviews" element={<MovieReviews />} />
+            </Route>
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+    
+      </Suspense>
     </div>
   );
 }
 
-export default App

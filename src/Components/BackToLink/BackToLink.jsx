@@ -5,7 +5,7 @@ export const BackToLink = ({to, children}) => {
   return (
     <div>
       <Link to={to}>
-        <VscArrowLeft  size="24" />
+        <VscArrowLeft  size="18" />
         {children}
       </Link>
     </div>

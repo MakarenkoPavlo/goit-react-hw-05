@@ -1,22 +1,26 @@
-import toast from 'react-hot-toast';
-
+import css from './SearchForm.module.css'
 export const SearchForm = ({ onSearch }) => {
   const handleSubmit = e => {
     e.preventDefault();
-
-    if (e.target.elements.query.value.trim() === '') {
-      toast.error('EMPTY STRING!');
-      return;
-    }
-
-    onSearch(e.target.elements.query.value);
+        onSearch(e.target.elements.query);
     e.target.reset();
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" name="query" />
-      <button type="submit">Search</button>
-    </form>
+    <div>
+      <header>
+        <form className={css.form} onSubmit={handleSubmit}>
+          <input
+            className={css.input}
+            type="text"
+            name="query"
+            autoComplete="off"
+            autoFocus
+          />
+          <button className={css.btn} type="submit">Search
+          </button>
+        </form>
+      </header>
+    </div>
   );
 };
