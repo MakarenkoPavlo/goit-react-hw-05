@@ -38,7 +38,7 @@ useEffect(() => {
  
     }
       fetchSearchMovies();
-    }, [query]);
+    }, [query, searchParams]);
 
   return (
     <div>
@@ -60,4 +60,3 @@ useEffect(() => {
     )
   
 }
-
