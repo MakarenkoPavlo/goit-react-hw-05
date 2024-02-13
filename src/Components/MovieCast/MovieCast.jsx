@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Loader } from '../Loader/Loader';
 import { ErrorMassage } from '../ErrorMassage/ErrorMassage';
-import css from './MovieCast.module.css'
+import css from './MovieCast.module.css';
 
 const MovieCast = () => {
     const { movieId } = useParams();
@@ -38,7 +38,10 @@ const MovieCast = () => {
         <div>
             {loader && <Loader />}
             {error && <ErrorMassage />}
-            {movieCastDetails && (
+            {!loader && !error && movieCastDetails.length === 0 && (
+                <p>No cast details available.</p>
+            )}
+            {movieCastDetails && movieCastDetails.length > 0 && (
                 <div className={css.container}>
                     <ul className={css.list}>
                         {movieCastDetails.map(actor => (
@@ -58,4 +61,5 @@ const MovieCast = () => {
         </div>
     );
 };
+
 export default MovieCast;

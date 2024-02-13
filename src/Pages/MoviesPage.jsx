@@ -10,11 +10,11 @@ export default function MoviesPage() {
   const [searchMovies, setSearchMovies] = useState([]);
   const [loader, setLoader] = useState(false);
   const [error, setError] = useState(false);
-    const [searchParams, setSearchParams] = useSearchParams();
-  const movieName = searchParams.get('query') ?? '';
   const location = useLocation();
 
- 
+  const searchMovie = async query => {
+  setQuery(query.value);
+  };
   
 useEffect(() => {
   const fetchSearchMovies = async () => {
@@ -23,8 +23,6 @@ useEffect(() => {
         setLoader(true);
         const fetchedSearch = await fetchMovieSearch(query);
         setSearchMovies(fetchedSearch.results)
-        const nextParams = query !== '' ? { query } : {};
-        setSearchParams(nextParams);
       } catch (error) {
         if (error.code !== 'ERR_CANCELLED') {
           console.log(error);
@@ -36,22 +34,18 @@ useEffect(() => {
  
     }
       fetchSearchMovies();
-}, [query, setSearchParams]);
-  
-   const searchMovie = async query => {
-  setQuery(query);
-  };
+    }, [query]);
 
   return (
     <div>
-      <SearchForm value={movieName} onSearch={searchMovie} />
+      <SearchForm onSearch={searchMovie} />
       {loader && <Loader />}
       {error && <ErrorMassage />}
       {searchMovies.length > 0 && (
          <ul>
           {searchMovies.map(movie => (
             <li key={movie.id}>
-              <Link to={`/movies/${movie.id}`} state={{ from: location, query: searchParams.get('query') }}>
+              <Link to={`/movies/${movie.id}`} state={{ from: location }}>
                 <h2>{movie.title}</h2>
               </Link>
             </li>

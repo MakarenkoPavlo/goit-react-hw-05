@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Loader } from '../Loader/Loader';
 import { ErrorMassage } from '../ErrorMassage/ErrorMassage';
-import css from './MovieReviews.module.css'
+import css from './MovieReviews.module.css';
 
 const MovieReviews = () => {
   const { movieId } = useParams();
@@ -14,14 +14,9 @@ const MovieReviews = () => {
   useEffect(() => {
     const fetchReviewsDetails = async () => {
       try {
+        setLoader(true);
         const fetchedReviews = await fetchMovieReviews(movieId);
-        if (fetchedReviews && fetchedReviews.results) {
-          setLoader(true);
-          setMovieReviewsDetails(fetchedReviews.results);
-        } else {
-          setMovieReviewsDetails([]);
-        }
-        setLoader(false);
+        setMovieReviewsDetails(fetchedReviews.results || []);
       } catch (error) {
         setError(true);
       } finally {
@@ -35,7 +30,10 @@ const MovieReviews = () => {
     <div className={css.container}>
       {loader && <Loader />}
       {error && <ErrorMassage />}
-      {movieReviewsDetails && (
+      {!loader && !error && movieReviewsDetails.length === 0 && (
+        <p>No reviews found.</p>
+      )}
+      {movieReviewsDetails.length > 0 && (
         <div>
           <ul>
             {movieReviewsDetails.map(review => (
@@ -50,4 +48,5 @@ const MovieReviews = () => {
     </div>
   );
 };
+
 export default MovieReviews;
