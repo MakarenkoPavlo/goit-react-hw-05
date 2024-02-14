@@ -1,15 +1,18 @@
-import { useSearchParams } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
 import css from './SearchForm.module.css'
 
 export const SearchForm = ({ onSearch }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const queryParam = searchParams.get('query') || ''; 
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const handleSubmit = e => {
     e.preventDefault();
     onSearch(e.target.elements.query);
-    setSearchParams({ query: e.target.elements.query.value });
     e.target.reset();
+    inputRef.current?.focus(); 
   };
 
   return (
@@ -18,11 +21,11 @@ export const SearchForm = ({ onSearch }) => {
         <form className={css.form} onSubmit={handleSubmit}>
           <input
             className={css.input}
+            ref={inputRef} 
             type="text"
             name="query"
             autoComplete="off"
             autoFocus
-            defaultValue={queryParam} 
           />
           <button className={css.btn} type="submit">Search</button>
         </form>

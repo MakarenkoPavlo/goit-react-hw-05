@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { Suspense } from 'react';
 
 import { useParams, Link, Outlet, useLocation} from 'react-router-dom';
 import { fetchMovieDetails } from '../Components/Api/Api'
@@ -77,7 +78,10 @@ export default function MovieDetailsPage() {
               </li>
             </ul>
           </div>
-          <Outlet />
+          <Suspense fallback={<div>Loading subpage...</div>}>
+              <Outlet />
+           </Suspense>
+        
         </div>}
     </div>
   );
